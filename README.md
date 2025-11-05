@@ -1,4 +1,4 @@
-# 32-Engineer-Regiment-Roadcraft
+# 32-Engineer-Regiment-RoadBuild
 This project will try to bring road construction into ArmA 3. By multiple steps the player will be able to remove obstacles, fill a truck with sand, place the sand on the ground. flatten the sand with a driveable bulldozer and asphalt the road.
 
 ---
@@ -6,7 +6,7 @@ This project will try to bring road construction into ArmA 3. By multiple steps 
 ###### How to install
 
 1. Copy all files from the **script** folder into your mission folder.
-2. Right now the system works for only one bulldozer spawner and one sandfiller. Later unlimited amounts can be added. Use **ER32_bulldozer_spawner** for the interaction point and **ER32_bulldozer_spawnpoint** for the spawn point. For sandfiller use **ER32_roadcraft_switch_sandFiller** for the interaction point and **ER32_roadcraft_sandFiller_zone** for the detection zone.
+2. Right now the system works for only one bulldozer spawner and one sandfiller. Later unlimited amounts can be added. Use **ER32_bulldozer_spawner** for the interaction point and **ER32_bulldozer_spawnpoint** for the spawn point. For sandfiller use **ER32_buildroad_switch_sandFiller** for the interaction point and **ER32_buildroad_sandFiller_zone** for the detection zone.
 3. And thats it.
 
 ---
@@ -24,11 +24,11 @@ This project will try to bring road construction into ArmA 3. By multiple steps 
 
 ###### File Overview
 
-* "ER32_roadcraft_bulldozer_demolishment.sqf"   Controls the demolishment part.
-* "ER32_roadcraft_bulldozer_flatten.sqf"        Controls the flattening of sandpiles.
-* "ER32_roadcraft_bulldozer_spawn.sqf"          Controls the spawning of the bulldozer.
-* "ER32_roadcraft_fillTruck.sqf"                Controls the filling of sand into the truck.
-* "ER32_roadcraft_sandDropper.sqf"              Controls the deployment of the sandpiles.
+* "ER32_buildroad_bulldozer_demolishment.sqf"   Controls the demolishment part.
+* "ER32_buildroad_bulldozer_flatten.sqf"        Controls the flattening of sandpiles.
+* "ER32_buildroad_bulldozer_spawn.sqf"          Controls the spawning of the bulldozer.
+* "ER32_buildroad_fillTruck.sqf"                Controls the filling of sand into the truck.
+* "ER32_buildroad_sandDropper.sqf"              Controls the deployment of the sandpiles.
 * "init.sqf"                                    Initializes the other scripts.
 
 ---
