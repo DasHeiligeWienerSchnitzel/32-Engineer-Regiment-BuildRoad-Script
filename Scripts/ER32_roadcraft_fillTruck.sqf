@@ -1,11 +1,17 @@
 params ["_zone"];
 
+//Collects trucks near the zone.
+
 _nearbyObjects = _zone nearObjects ["B_Truck_01_cargo_F",5];
 _nearestTruck = objNull;
+
+//Checks if even one truck was found, otherwise script will end here.
 
 if (count _nearbyObjects == 0) exitWith {
 	hint "No trucks nearby";
 };
+
+//If atleast one or more trucks were found, the closest one will be selected.
 
 if (count _nearbyObjects == 1) then {
 	_nearestTruck = _nearbyObjects select 0;
@@ -14,15 +20,23 @@ if (count _nearbyObjects == 1) then {
 	_nearestTruck = _sorted select 0;
 };
 
+//Now checks again, if the truck is really in the zone.
+
 _truckInArea = _nearestTruck inArea [_zone, 2, 3, getDir _zone, true]; 
+
+//Pre-selected positions for sands. 
 
 _height = -0.5;
 _sandPositions = [[0, 0.5, _height],[0, -1.5, _height],[0, -3.1, _height]];
 
+//Disables the simulation of the truck (so it does not blow up).
+
 _nearestTruck enableSimulationGlobal false;
 
-_sandFilled = _nearestTruck getVariable ["ER32_roadcraft_sandFilled",0];
-if (_sandFilled == 0) then {
+//Spawns the sand objects onto the truck.
+
+_sandFilled = _nearestTruck getVariable ["ER32_buildRoadt_sandFilled",0];
+if (_sandFilled <= 0) then {
 	for "_i" from 0 to 2 do {
 		_sand = createVehicle ["EFM_ground_surface_2x2m_soil", position _nearestTruck, [], 0, "CAN_COLLIDE"];
 		_sand enableSimulationGlobal false;
@@ -30,11 +44,22 @@ if (_sandFilled == 0) then {
 	};	
 };
 
-_filled = false;
+//Collects the just created sand objects.
+
 _sands = _nearestTruck nearObjects ["EFM_ground_surface_2x2m_soil",5];
+
+/*
+Now the truck will be slowly "filled" with sand.
+This is done by setting the sand objects incremently higher.
+Sand will be "filled" till either the truck was removed from the zone (Not likely).
+Or the position of the sands reached 0.0 (or higher), which is the top of the truck.
+*/
+
+_filled = false;
 while {_truckInArea == true and _filled == false} do {
 	_truckInArea = _nearestTruck inArea [_zone, 2, 3, getDir _zone, true];
 	_height = _height + 0.001;
+	hintSilent format ["Sand Filled: %1/1500",_sandFilled];
 	_sandFilled = _sandFilled + 3;
 	_sandPositions = [[0, 0.5, _height],[0, -1.5, _height],[0, -3.1, _height]];
 	{
@@ -43,17 +68,25 @@ while {_truckInArea == true and _filled == false} do {
 	if (_height >= 0.0) then {
 		_filled = true;
 	};
-	hint format ["%1",_sandFilled];
 	sleep 0.1;
 };
 
+//There is 3 exess sand, I am too lazy to compute it again. Its just 3 too much so it just gets removed in the end...
+
 _sandFilled = _sandFilled - 3;
-_nearestTruck setVariable ["ER32_roadcraft_sandFilled", _sandFilled, true];
+_nearestTruck setVariable ["ER32_buildRoad_sandFilled", _sandFilled, true];
+
+//Enables the simulation of the truck again. Can be driven again now.
 
 _nearestTruck enableSimulationGlobal true;
 
-_ER32_roadcraft_sandDropper = [
-	"ER32_roadcraft_sandDropper",
+/*
+Two new actions will be added to the truck, aslong as the truck has sand inside it. 
+One allows for a singular sand drop, and the other will just repeatedly dump the sand out the back.
+*/
+
+_ER32_buildRoad_sandDropper = [
+	"ER32_buildRoad_sandDropper",
 	"Drop Sand",
 	"",
 	{
@@ -62,13 +95,13 @@ _ER32_roadcraft_sandDropper = [
 	},
 	{
 		params ["_target","_player","_params"];
-		(_target getVariable ["ER32_roadcraft_sandFilled",1]) > 0;
+		(_target getVariable ["ER32_buildRoad_sandFilled",1]) > 0;
 	}
 ] call ace_interact_menu_fnc_createAction;
-[_nearestTruck, 1, ["ACE_SelfActions"], _ER32_roadcraft_sandDropper] call ace_interact_menu_fnc_addActionToObject;
+[_nearestTruck, 1, ["ACE_SelfActions"], _ER32_buildRoad_sandDropper] call ace_interact_menu_fnc_addActionToObject;
 
-_ER32_roadcraft_sandDropper_loopActive = [
-	"ER32_roadcraft_sandDropper_loopActive",
+_ER32_buildRoad_sandDropper_loopActive = [
+	"ER32_buildRoad_sandDropper_loopActive",
 	"Drop Sand (Activate Loop)",
 	"",
 	{
@@ -77,10 +110,10 @@ _ER32_roadcraft_sandDropper_loopActive = [
 	},
 	{
 		params ["_target","_player","_params"];
-		(_target getVariable ["ER32_roadcraft_sandFilled",1]) > 0;
+		(_target getVariable ["ER32_buildRoad_sandFilled",1]) > 0;
 	}
 ] call ace_interact_menu_fnc_createAction;
-[_nearestTruck, 1, ["ACE_SelfActions"], _ER32_roadcraft_sandDropper_loopActive] call ace_interact_menu_fnc_addActionToObject;
+[_nearestTruck, 1, ["ACE_SelfActions"], _ER32_buildRoad_sandDropper_loopActive] call ace_interact_menu_fnc_addActionToObject;
 
 
 
