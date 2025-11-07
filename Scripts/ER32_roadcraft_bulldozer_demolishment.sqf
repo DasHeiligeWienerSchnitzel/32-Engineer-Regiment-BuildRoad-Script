@@ -1,52 +1,32 @@
 params ["_object"];
 
+//Sets and gets the Demolishment_State. Aka checks if demolishment is on or off.
 
-ER32_bulldozer_demolition_deactive = [
-	"ER32_bulldozer_demolition_deactive",
-	"Stop Demolishment",
-	"",
-	{
-		params ["_target","_player","_params"];
-		[_target, 1, ["ACE_SelfActions","ER32_bulldozer_demolition_deactive"]] call ace_interact_menu_fnc_removeActionFromObject;
-		[_target, 1, ["ACE_SelfActions"], ER32_bulldozer_demolition_activ] call ace_interact_menu_fnc_addActionToObject;
-		_target setVariable ["ER32_Demolishment_State", false, true];
-	},
-	{true}
-] call ace_interact_menu_fnc_createAction;
+_demolishment = _object getVariable ["ER32_Demolishment_State", true];
 
-
-ER32_bulldozer_demolition_activ = [
-	"ER32_bulldozer_demolition_aktiv",
-	"Start Demolishment",
-	"",
-	{
-		params ["_target","_player","_params"];
-		[_target, 1, ["ACE_SelfActions","ER32_bulldozer_demolition_aktiv"]] call ace_interact_menu_fnc_removeActionFromObject;
-		[_target, 1, ["ACE_SelfActions"], ER32_bulldozer_demolition_deactive] call ace_interact_menu_fnc_addActionToObject;
-		[_target] execVM "ER32_roadcraft_bulldozer_demolishment.sqf";
-	},
-	{true}
-] call ace_interact_menu_fnc_createAction;
-
-
-_pos = [position _object, 5, getDir _object] call BIS_fnc_relPos;
-_zoneHelper = createVehicle ["VR_Area_01_square_4x4_yellow_F", _pos, [], 0, "CAN_COLLIDE"];
-_object setVariable ["ER32_Demolishment_State", true, true];
-_demolishment = _object getVariable ["ER32_Demolishment_State", false];
-
-[_object, 1, ["ACE_SelfActions"], ER32_bulldozer_demolition_deactive] call ace_interact_menu_fnc_addActionToObject;
-[_object, 1, ["ACE_SelfActions","ER32_bulldozer_demolition_aktiv"]] call ace_interact_menu_fnc_removeActionFromObject;
+/*
+Aslong as demolishment is on, it will continuously destroy terrainObjects infront of the bulldozer.
+*/
 
 while {_demolishment == true} do {
-	_demolishment = _object getVariable ["ER32_Demolishment_State", false];
+	
+	//Gets the relativ forward position of the bulldozer.
+	
 	_pos = [position _object, 5, getDir _object] call BIS_fnc_relPos;
-	_zoneHelper setPos _pos;
-	_zoneHelper setDir (getDir _object);
 	
-	_nearbyTerrainObjects = nearestTerrainObjects [_zoneHelper, [], 4, false, true];
+	//Collects all nearbyTerrainObjects that are in a 4 meter radius infront of the bulldozer.
 	
-	_objectsInZone = _nearbyTerrainObjects inAreaArray [_zoneHelper,2.5,2.5,getDir _object,false,5];
-	hint format ["%1", count _objectsInZone];
+	_nearbyTerrainObjects = nearestTerrainObjects [_pos, [], 4, false, true];
+	
+	//Now gets every object in that array that is in a 2.5 meter cube infront of the bulldozer.
+	
+	_objectsInZone = _nearbyTerrainObjects inAreaArray [_pos,2.5,2.5,getDir _object,false,5];
+
+	/*
+	For each Object in this cube, damage will be implied, destroying the objects in the process.
+	After 5 seconds the destroyed object will be deleted.
+	*/
+	
 	{
 		[_x] spawn {
 			params ["_terrainObject"];
@@ -57,7 +37,9 @@ while {_demolishment == true} do {
 	}forEach _objectsInZone;
 	
 	sleep 0.01;
+	
+	//Checks if demolishment is still on.
+	
+	_demolishment = _object getVariable ["ER32_Demolishment_State", false];
+	
 };
-
-deleteVehicle _zoneHelper;
-
