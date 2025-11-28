@@ -2,6 +2,9 @@
 ###### Fixes
 - Fixed a problem, where on a dedicated server, the ace self interaction for dropping sand would not show.
 - Fixed a problem, where the truck would stay unsimulated if trying to refill, when already full.
+- Demolishment now works properly in mp.
+- Flattening can now be existed correctly.
+- No overfilling possible anymore. Will not load more then 1500 sand into the truck.
 
 # Version 1.0
 Release Version with main functions and mp compatibility.
