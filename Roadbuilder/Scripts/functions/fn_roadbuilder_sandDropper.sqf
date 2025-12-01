@@ -105,6 +105,8 @@ if (_loop == false) then {
 			if (_sandAmount < 1) then {
 				{
 					deleteVehicle _x;
+					_vehicle setVariable ["ER32_roadbuilder_sandDropper_loopActive",false,true];
+					[_vehicle] remoteExecCall ["ER32_fnc_roadbuilder_removeSandDropperAction",-2];
 				}forEach _sands;
 			};
 		};
