@@ -37,7 +37,7 @@ _sandPositions = [[0, 0.5, _height],[0, -1.5, _height],[0, -3.1, _height]];
 
 //Disables the simulation of the truck (so it does not blow up).
 
-_nearestTruck enableSimulationGlobal false;
+
 
 //Spawns the sand objects onto the truck.
 
@@ -46,7 +46,7 @@ _sandFilled = _nearestTruck getVariable ["ER32_roadbuilder_sandFilled",0];
 if (_sandFilled >= 1500) exitWith {
 	["Truck already filled to the maximum."] remoteExec ["hint",owner _player];
 };
-
+_nearestTruck enableSimulationGlobal false;
 if (_sandFilled <= 0) then {
 	for "_i" from 0 to 2 do {
 		_sand = createVehicle ["EFM_ground_surface_2x2m_soil", position _nearestTruck, [], 0, "CAN_COLLIDE"];
@@ -99,6 +99,7 @@ Two new actions will be added to the truck, aslong as the truck has sand inside 
 One allows for a singular sand drop, and the other will just repeatedly dump the sand out the back.
 */
 
+[_nearestTruck] remoteExecCall ["ER32_fnc_roadbuilder_removeSandDropperAction",-2];
 [_nearestTruck] remoteExecCall ["ER32_fnc_roadbuilder_addSandDropperAction",-2];
 
 ER32_roadbuilder_sandTrucks pushBack _nearestTruck;
