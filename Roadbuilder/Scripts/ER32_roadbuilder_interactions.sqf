@@ -96,7 +96,7 @@ ER32_roadbuilder_sandDropper_loopDeactive = [
 
 //----------------------------------------------------------------------------------------------------------------------------
 
-if (hasInterface) then {
+if (hasInterface and isMultiplayer ) then {
 
 	params ["_fillTruckZones","_fillTruckSwitches","_bulldozer_spawners","_bulldozer_spawnpoints"];
 
