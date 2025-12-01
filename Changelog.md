@@ -1,7 +1,15 @@
+# Version 1.2
+###### Fixes
+- Fixed an issue, where the sand dropper action would get duplicated after filling the truck a second time at the refiller.
+
+---
+
 # Version 1.1
 ###### Fixes
 - Fixed a problem, where on a dedicated server, the ace self interaction for dropping sand would not show.
 - Fixed a problem, where the truck would stay unsimulated if trying to refill, when already full.
+
+---
 
 # Version 1.0
 Release Version with main functions and mp compatibility.
