@@ -1,2 +1,2 @@
-//Infastructur
+//Roadbuilder
 execVM "Scripts\ER32_roadbuilder_config.sqf";
