@@ -1,4 +1,4 @@
-params ["_zone","_player"];
+params ["_zone","_particleSpawn","_player"];
 
 //Collects trucks near the zone.
 
@@ -46,11 +46,13 @@ _sandFilled = _nearestTruck getVariable ["ER32_roadbuilder_sandFilled",0];
 if (_sandFilled >= 1500) exitWith {
 	["Truck already filled to the maximum."] remoteExec ["hint",owner _player];
 };
+
 _nearestTruck enableSimulationGlobal false;
 if (_sandFilled <= 0) then {
 	for "_i" from 0 to 2 do {
-		_sand = createVehicle ["EFM_ground_surface_2x2m_soil", position _nearestTruck, [], 0, "CAN_COLLIDE"];
+		_sand = createVehicle ["EFM_ground_surface_2x2m_soil", position _nearestTruck, [], 0, "NONE"];
 		_sand enableSimulationGlobal false;
+		_sand disableCollisionWith _nearestTruck;
 		_sand attachTo [_nearestTruck, _sandPositions select _i];
 	};	
 };
@@ -67,6 +69,9 @@ Or the position of the sands reached 0.0 (or higher), which is the top of the tr
 */
 
 _filled = false;
+_particleSpawn setVariable ["ER32_roadbuilder_filled",_filled,true];
+
+[_particleSpawn] remoteExec ["ER32_fnc_roadbuilder_fillTruck_particleEffects",0];
 
 while {_truckInArea == true and _filled == false} do {
 	_truckInArea = _nearestTruck inArea [_zone, 2, 3, getDir _zone, true];
@@ -81,6 +86,7 @@ while {_truckInArea == true and _filled == false} do {
 	}forEach _sands;
 	if (_height >= 0.0) then {
 		_filled = true;
+		_particleSpawn setVariable ["ER32_roadbuilder_filled",_filled,true];
 	};
 	sleep 0.1;
 };
@@ -98,9 +104,13 @@ _nearestTruck enableSimulationGlobal true;
 Two new actions will be added to the truck, aslong as the truck has sand inside it. 
 One allows for a singular sand drop, and the other will just repeatedly dump the sand out the back.
 */
-
-[_nearestTruck] remoteExecCall ["ER32_fnc_roadbuilder_removeSandDropperAction",-2];
-[_nearestTruck] remoteExecCall ["ER32_fnc_roadbuilder_addSandDropperAction",-2];
+if (isMultiplayer) then {
+	[_nearestTruck] remoteExecCall ["ER32_fnc_roadbuilder_removeSandDropperAction",-2];
+	[_nearestTruck] remoteExecCall ["ER32_fnc_roadbuilder_addSandDropperAction",-2];
+}else{
+	[_nearestTruck] call ER32_fnc_roadbuilder_removeSandDropperAction;
+	[_nearestTruck] call ER32_fnc_roadbuilder_addSandDropperAction;
+};
 
 ER32_roadbuilder_sandTrucks pushBack _nearestTruck;
 publicVariable "ER32_roadbuilder_sandTrucks";

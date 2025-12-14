@@ -1,6 +1,7 @@
 class CfgFunctions {
 	class ER32 {
-		class Roadbuilder {
+		class Roadbuilder 
+		{
 			file = "Scripts\functions"; //folder
 			
 			class roadbuilder_activateDemolishment {};
@@ -11,6 +12,17 @@ class CfgFunctions {
 			class roadbuilder_addSandDropperAction {};
 			class roadbuilder_addAndRemoveSandDropperActions {};
 			class roadbuilder_removeSandDropperAction {};
+			class roadbuilder_fillTruck_particleEffects {};
 		};
+};
+
+class CfgSounds {
+	sounds[] = {};
+	
+	class ER32_sandFalling
+	{
+		name = "Sand Falling Sound";
+		sound[] = {"Sounds\ER32_roadbuilder_sandFalling.ogg",5,1,80};
+		titles[] = {};
 	};
 };

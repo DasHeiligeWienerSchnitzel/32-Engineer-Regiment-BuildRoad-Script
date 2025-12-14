@@ -6,9 +6,15 @@ ER32_roadbuilder_bulldozer_demolition_deactive = [
 	"",
 	{
 		params ["_target","_player","_params"];
-		[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_demolition_deactive"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
-		[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
-		[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+		if (isMultiplayer) then {
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_demolition_deactive"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+		}else{
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_demolition_deactive"]] call ace_interact_menu_fnc_removeActionFromObject;
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_active] call ace_interact_menu_fnc_addActionToObject;
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_active] call ace_interact_menu_fnc_addActionToObject;
+		};
 		_target setVariable ["ER32_roadbuilder_demolishmentState", false, true];
 	},
 	{true}
@@ -22,9 +28,15 @@ ER32_roadbuilder_bulldozer_demolition_active = [
 	"",
 	{
 		params ["_target","_player","_params"];
-		[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_demolition_active"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
-		[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_flatten_active"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
-		[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_deactive] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+		if (isMultiplayer) then {
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_demolition_active"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_flatten_active"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_deactive] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+		}else{
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_demolition_active"]] call ace_interact_menu_fnc_removeActionFromObject;
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_flatten_active"]] call ace_interact_menu_fnc_removeActionFromObject;
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_deactive] call ace_interact_menu_fnc_addActionToObject;
+		};
 		[_target] remoteExec ["ER32_fnc_roadbuilder_activateDemolishment",2];
 	},
 	{true}
@@ -40,9 +52,15 @@ ER32_roadbuilder_bulldozer_flatten_active = [
 	"",
 	{
 		params ["_target","_player","_params"];
-		[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_flatten_active"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
-		[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_deactive] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
-		[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_demolition_active"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
+		if (isMultiplayer) then {
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_flatten_active"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_deactive] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_demolition_active"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
+		}else{
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_flatten_active"]] call ace_interact_menu_fnc_removeActionFromObject;
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_deactive] call ace_interact_menu_fnc_addActionToObject;
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_demolition_active"]] call ace_interact_menu_fnc_removeActionFromObject;
+		};
 		[_target] spawn ER32_fnc_roadbuilder_flatten;
 	},
 	{true}
@@ -56,9 +74,15 @@ ER32_roadbuilder_bulldozer_flatten_deactive = [
 	"",
 	{
 		params ["_target","_player","_params"];
-		[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_flatten_deactive"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
-		[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
-		[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+		if (isMultiplayer) then {
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_flatten_deactive"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+		}else{
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_bulldozer_flatten_deactive"]] call ace_interact_menu_fnc_removeActionFromObject;
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_active] call ace_interact_menu_fnc_addActionToObject;
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_active] call ace_interact_menu_fnc_addActionToObject;
+		};
 		_target setVariable ["ER32_roadbuilder_bulldozer_flatten", false, true];
 	},
 	{true}
@@ -70,7 +94,7 @@ ER32_roadbuilder_sandDropper_loopActive = [
 	"",
 	{
 		params ["_target","_player","_params"];
-		[_target,true,_player] remoteExec ["ER32_fnc_roadbuilder_sandDropper",2];
+		[_target,_player] remoteExec ["ER32_fnc_roadbuilder_sandDropper",2];
 	},
 	{
 		params ["_target","_player","_params"];
@@ -85,10 +109,14 @@ ER32_roadbuilder_sandDropper_loopDeactive = [
 	"",
 	{
 		params ["_target","_player","_params"];
-		[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_sandDropper_loopDeactive"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
+		if (isMultiplayer) then {
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_sandDropper_loopDeactive"]] remoteExecCall ["ace_interact_menu_fnc_removeActionFromObject",-2];
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_sandDropper_loopActive] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+		}else{
+			[_target, 1, ["ACE_SelfActions","ER32_roadbuilder_sandDropper_loopDeactive"]] call ace_interact_menu_fnc_removeActionFromObject;
+			[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_sandDropper_loopActive] call ace_interact_menu_fnc_addActionToObject;
+		};
 		_target setVariable ["ER32_roadbuilder_sandDropper_loopActive",false,true];
-		
-		[_target, 1, ["ACE_SelfActions"], ER32_roadbuilder_sandDropper_loopActive] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
 	},
 	{true}
 ] call ace_interact_menu_fnc_createAction;
@@ -96,15 +124,19 @@ ER32_roadbuilder_sandDropper_loopDeactive = [
 
 //----------------------------------------------------------------------------------------------------------------------------
 
-if (hasInterface and isMultiplayer ) then {
+if (hasInterface) then {
 
-	params ["_fillTruckZones","_fillTruckSwitches","_bulldozer_spawners","_bulldozer_spawnpoints"];
+	params ["_fillTruckZones","_fillTruckSwitches","_fillTruckParticles","_bulldozer_spawners","_bulldozer_spawnpoints"];
 
 	//Adds interaction to fill trucks on deticated zones.
 
 	for "_i" from 0 to (count _fillTruckSwitches - 1) do {
+		
 		(_fillTruckSwitches select _i) setObjectTextureGlobal [0,""];
 		_zone = _fillTruckZones select _i;
+		_particleSpawn = _fillTruckParticles select _i;
+		_particleSpawn setObjectTextureGlobal [0,""];
+		
 		_ER32_roadbuilder_sandFiller = [
 			"ER32_roadbuilder_sandFiller",
 			"Start Filling Truck with Sand",
@@ -112,11 +144,12 @@ if (hasInterface and isMultiplayer ) then {
 			{
 				params ["_target","_player","_params"];
 				_zone = _params select 0;
-				[_zone,_player] remoteExec ["ER32_fnc_roadbuilder_fillTruck",2];
+				_particleSpawn = _params select 1;
+				[_zone,_particleSpawn,_player] remoteExec ["ER32_fnc_roadbuilder_fillTruck",2];
 			},
 			{true},
 			{},
-			[_zone]
+			[_zone,_particleSpawn]
 		] call ace_interact_menu_fnc_createAction;
 		
 		[_fillTruckSwitches select _i, 0, ["ACE_MainActions"], _ER32_roadbuilder_sandFiller] call ace_interact_menu_fnc_addActionToObject;
@@ -140,7 +173,7 @@ if (hasInterface and isMultiplayer ) then {
 				
 				//Creates the tractor, disables it simulation and removes its texture.
 				
-				_tractor = createVehicle ["C_Tractor_01_F", position _spawnpoint, [], 0, "CAN_COLLIDE"];
+				_tractor = createVehicle ["UK3CB_C_Tractor", position _spawnpoint, [], 0, "CAN_COLLIDE"];
 				_tractor enableSimulationGlobal false;
 				_tractor setObjectTextureGlobal [0,""];
 				_tractor setDir ((getDir _spawnpoint) - 180);
@@ -161,8 +194,19 @@ if (hasInterface and isMultiplayer ) then {
 				
 				//Adds interaction points to the bulldozer, allowing it to run the demolish and flatten script.
 				
-				[_tractor, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
-				[_tractor, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+				if (isMultiplayer) then {
+					[_tractor, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+					[_tractor, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_active] remoteExecCall ["ace_interact_menu_fnc_addActionToObject",-2];
+					if (!isNil "ER32_fnc_buildAndRessources_loadOnFlatbed") then {
+						[_tractor,[],0] remoteExecCall ["ER32_fnc_buildAndRessources_loadOnFlatbed",-2]; 
+					};
+				}else{
+					[_tractor, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_demolition_active] call ace_interact_menu_fnc_addActionToObject;
+					[_tractor, 1, ["ACE_SelfActions"], ER32_roadbuilder_bulldozer_flatten_active] call ace_interact_menu_fnc_addActionToObject;
+					if (!isNil "ER32_fnc_buildAndRessources_loadOnFlatbed") then {
+						[_tractor,[],0] call ER32_fnc_buildAndRessources_loadOnFlatbed;
+					};
+				};
 				
 				//Appends it to the global bulldozer list.
 				ER32_roadbuilder_spawnedBulldozers pushBack _tractor;
